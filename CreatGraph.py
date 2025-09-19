@@ -1,14 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import networkx as nx
-from scipy.spatial import distance_matrix
-import os
-
 from DataNormalization import filepath
 
 #加载归一化数据
 def load_normalized_data(dataset_name, method_name="minmax"):
-    filepath = "DataResults"
     filename =  f"{dataset_name}_{method_name}_data.txt"
     try:
         data = np.loadtxt(f"{filepath}/{filename}")
