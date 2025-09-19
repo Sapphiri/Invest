@@ -39,7 +39,6 @@ for name, loader in datasets.items():
         'target': y,
         'target_names': z
     }
-
     standardized_results[name] = {
         'data': data_standard,
         'feature_names': x,
@@ -55,25 +54,30 @@ print("\n所有归一化处理完成！")
 
 #用于输出所有数据集的最大-最小归一化结果
 def print_normalized_results():
-    for name, data_dict in normalized_results.items():
-        data = data_dict['data']
-        print(f"\n{name} 数据集:")
+    for dataset_name, data_results in normalized_results.items():
+        data = data_results['data']
+        print(f"\n{dataset_name} 数据集:")
         print(f"数据形状: {data.shape}")
         print(data,"\n")
 
 # 创建文件夹（如果不存在）
 filepath = "DataResults"
 os.makedirs(filepath, exist_ok=True)
+
 #用于保存所有数据集的归一化结果
 def save_data_minmax(results, method_name):
-    for name, data_results in results.items():
-        filename = f"{name}_{method_name}_data.txt"
+    for dataset_name, data_results in results.items():
+        filename = f"{dataset_name}_{method_name}_data.txt"
         np.savetxt(f"{filepath}/{filename}", data_results['data'])
-        print(f"已保存{name}的{method_name}归一化数据: {filename}")
+        print(f"已保存{dataset_name}的{method_name}归一化数据: {filename}")
     print(f"\n所有{method_name}归一化数据已保存完毕！")
 
-#输出有数据集的归一化结果
-print_normalized_results()
-#保存所有数据集的归一化结果
-save_data_minmax(normalized_results, "minmax")
-#save_data_minmax(standardized_results, "standard")
+def main():
+    #输出有数据集的归一化结果
+    print_normalized_results()
+    #保存所有数据集的归一化结果
+    save_data_minmax(normalized_results, "minmax")
+    #save_data_minmax(standardized_results, "standard")
+
+if __name__ == "__main__":
+    main()
