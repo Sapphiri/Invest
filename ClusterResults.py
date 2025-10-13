@@ -10,7 +10,7 @@ def perform_kmeans(datasets,k_values):
 
     for dataset_name in datasets:
         print(f"\n{'=' * 50}")
-        print(f"正在处理数据集: {dataset_name}")
+        print(f"正在处理数据集(Kmeans): {dataset_name}")
 
         # 获取归一化后的数据
         data = load_normalized_data(dataset_name, method_name="minmax")
@@ -20,7 +20,7 @@ def perform_kmeans(datasets,k_values):
         # 执行K-means聚类
         kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
         y_pred = kmeans.fit_predict(data)
-        print(type(y_pred),y_pred)
+        # print(type(y_pred),y_pred)
 
         # 将标签数组转换为聚类字典格式
         cluster_dict = {}
@@ -36,13 +36,14 @@ def perform_kmeans(datasets,k_values):
             'cluster_sizes': [len(idx) for idx in cluster_dict.values()],  # 各聚类大小
             'kmeans_model': kmeans  # 存储模型用于后续分析
         }
+        print(f'{dataset_name}数据集Kmeans聚类已完成')
     return cluster_results
 
 # 用于输出所有数据集的聚类标签
 def print_cluster_results(cluster_results):
     for dataset_name,data_cluster_result in cluster_results.items():
         y_pred=data_cluster_result['labels']
-        print(f"\n{dataset_name} 数据集 {data_cluster_result['cluster_model']} 聚类结果：")
+        print(f"\n{dataset_name} 数据集聚类结果：")
         print(y_pred,"\n")
 
 def main():

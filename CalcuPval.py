@@ -1,34 +1,26 @@
+import os
+os.environ["OMP_NUM_THREADS"] = "1"
 from scipy.stats import hypergeom
 
 import CreatGraph
-
-# 计算一个数据集的Pval
-#$def cacul_pval(data,cluster_result):
-    # 求Pval需要：数据集KNN图的总度数，某类别内样本的总度数，该样本的总度数，该样本与该类别内样本关联的半边数
-
-    # 1：获取所有样本节点的度（即关联边数）
-    # knn_G=sum(dict(knn_G.degree()).values())
-
-    # 2：获取单个节点的度
-    # edge_count = knn_G.degree(node_id)
-    # print(f"与节点 {node_id} 相关的边有 {edge_count} 条")
-    # 2: 获取聚类得到的类别
-
-    # 3：看被分到该类的样本有哪些
-
-    # 4：看该类样本一共有多少个半边（度的和）
+import ClusterResults
 
 """
 计算单个节点与给定聚类的关联p值（基于Fisher's exact test）
-返回:
-    p_value: 节点与聚类的关联p值"""
-def calculate_p_value_for_node(graph, cluster, node):
+返回p_value: 节点与聚类的关联p值
+"""
+def calculate_p_value_for_node(graph, cluster_result, node,cluster_id):
+    clustering_dict = cluster_result['clustering_dict']
+    # 获取指定的聚类(list)
+    cluster_nodes = clustering_dict.get(cluster_id, [])
+    print(f"聚类{cluster_id}包含样本:{cluster_nodes}")
+    if not cluster_nodes:
+        raise ValueError(f"聚类 {cluster_id} 不存在或为空")
     # 节点是否在聚类中，计算方法不同
-    if node in cluster:
-        return calculate_p_value_for_node_in_cluster(graph, cluster, node)
+    if node in cluster_nodes:
+        return calculate_p_value_for_node_in_cluster(graph, cluster_nodes, node)
     else:
-        return calculate_p_value_for_node_outside_cluster(graph, cluster, node)
-
+        return calculate_p_value_for_node_outside_cluster(graph, cluster_nodes, node)
 
 """
 计算节点不在聚类中时与聚类的关联p值
@@ -82,3 +74,31 @@ def calculate_p_value_for_node_in_cluster(graph, cluster, node):
 
     return p_value
 
+"""
+    计算整个聚类的统计显著性
+"""
+def calculate_cluster_significance(graph, cluster, alpha=0.01, method='FWER'):
+    n_nodes = graph.number_of_nodes()
+    cluster_p_values = []
+
+    # 计算聚类中所有节点的p值
+    for node in cluster:
+        p_val = calculate_p_value_for_node(graph, cluster, node)
+        cluster_p_values.append((node, p_val))
+def main():
+    # 数据集
+    datasets=['Iris']
+    # 自定义KNN图K值
+    knn_vals={
+        'Iris':3
+    }
+    # 自定义聚类K值
+    k_vals={
+        'Iris': 3
+    }
+    knn_graphs = CreatGraph.create_knn_graphs(datasets, knn_vals)
+    cluster_results = ClusterResults.perform_kmeans(datasets, k_vals)
+    for dataset_name in datasets:
+        print(calculate_p_value_for_node(knn_graphs[dataset_name],cluster_results[dataset_name],0,0))
+if __name__ == "__main__":
+    main()

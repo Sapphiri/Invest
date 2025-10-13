@@ -53,8 +53,9 @@ def create_knn_graph(data,k):
 def create_knn_graphs(datasets,k_vals):
     knn_graphs={}  # 用于存储所有图的字典
     for dataset_name in datasets:
+        print(f"\n{'=' * 50}")
+        print(f"正在处理数据集(KNN_Graph): {dataset_name}")
         data=load_normalized_data(dataset_name, method_name="minmax")
-        print(f"\n{dataset_name} 数据集:")
         print(f"数据形状: {data.shape}",type(data))
         # print(data,"\n")
         k = k_vals.get(dataset_name, 3)
