@@ -160,7 +160,7 @@ def calculate_p_value_for_node_outside_cluster(graph, cluster, node):
     return p_value
 
 """
-打印聚类显著性分析结果
+打印一个数据集聚类整体显著性分析结果
 """
 def print_overall_clustering_significance(overall_stats,dataset_name=""):
     print("="*80)
@@ -178,6 +178,9 @@ def print_overall_clustering_significance(overall_stats,dataset_name=""):
     print(f"平均显著性比例：{overall_stats['average_significance_ratio']:.1%}")
     print()
 
+"""
+打印一个数据集具体聚类显著性分析结果
+"""
 def print_cluster_significance(cluster_significances):
     # 打印每个聚类的详细信息
     print("各聚类详细信息:")
