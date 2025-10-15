@@ -108,6 +108,19 @@ def get_dataset_classes(dataset_name):
         print(f"错误: 数据集 '{dataset_name}' 不存在")
         print(f"可用的数据集：{list(datasets.keys())}")
         return -1
+'''
+返回样本数量
+'''
+def get_dataset_numbers(dataset_name):
+    if dataset_name in datasets:
+        # 加载数据集
+        dataset=datasets[dataset_name]()
+        # 返回类别数
+        return dataset.data.shape[0]  # 样本数量
+    else:
+        print(f"错误: 数据集 '{dataset_name}' 不存在")
+        print(f"可用的数据集：{list(datasets.keys())}")
+        return -1
 
 def main():
     #对数据进行归一化处理
@@ -121,6 +134,7 @@ def main():
     save_data_minmax(minmax_results, "minmax")
     #save_data_standard(standardized_results, "standard")
     print('Iris数据集的类别数为：',get_dataset_classes('Iris'))
+    print('Iris数据集的样本数为：',get_dataset_numbers('Iris'))
 
 
 if __name__ == "__main__":

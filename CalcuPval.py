@@ -1,5 +1,6 @@
 import os
 os.environ["OMP_NUM_THREADS"] = "1"
+from DataNormalization import get_dataset_numbers
 import numpy as np
 from scipy.stats import hypergeom, alpha
 import CreatGraph
@@ -203,9 +204,9 @@ def main():
     datasets=['Iris','Wine','Breast Cancer']
     # 自定义KNN图K值
     knn_vals={
-        'Iris':10,
-        'Wine': 18,
-        'Breast Cancer': 30
+        'Iris':int(np.sqrt(get_dataset_numbers('Iris'))),
+        'Wine': int(np.sqrt(get_dataset_numbers('Wine'))),
+        'Breast Cancer': int(np.sqrt(get_dataset_numbers('Breast Cancer')))
     }
     # 自定义聚类K值
     k_vals={

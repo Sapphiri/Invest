@@ -4,19 +4,19 @@ from scipy.spatial import distance_matrix
 from DataNormalization import load_normalized_data
 
 # 返回一个数据集最近k个节点的索引矩阵（n维数组）
-def get_knn_neighbors(data, k):
+def get_knn_neighbors(data,k):
     n = len(data)
     # 初始化n×k的数组存储近邻索引
-    knn_neighbors = np.zeros((n, k), dtype=int)
+    knn_neighbors = np.zeros((n,k),dtype=int)
     data_matrix=distance_matrix(data,data)
     for i in range(n):
         # 获取i到所有节点的距离（含自身）
         distances=data_matrix[i]
         # 生成索引-距离对列表 (节点索引，距离)
-        index_distances=[(idx, distances) for idx, distances in enumerate(distances)]
+        index_distances=[(idx,distances) for idx, distances in enumerate(distances)]
         # 按距离排序，再筛选掉索引为i的元素，最后取前k个索引
-        sorted_distances=sorted(index_distances, key=lambda x: x[1])
-        filtered_distances=[sd for sd in sorted_distances if sd[0]!= i]
+        sorted_distances=sorted(index_distances,key=lambda x: x[1])
+        filtered_distances=[sd for sd in sorted_distances if sd[0]!=i]
         nearest_index=[fd[0] for fd in filtered_distances[:k]]
         # print(f'i: {i}, 近邻索引: {nearest_index}')
         knn_neighbors[i]=nearest_index
@@ -25,23 +25,29 @@ def get_knn_neighbors(data, k):
 # 对一个数据集创建并返回knn图
 def create_knn_graph(data,k):
     # 计算样本间的欧几里得距离矩阵
-    data_matrix=distance_matrix(data, data)
+    data_matrix=distance_matrix(data,data)
     # 计算样本的最近k个节点的索引矩阵
-    knn_neighbors=get_knn_neighbors(data, k)
+    knn_neighbors=get_knn_neighbors(data,k)
     # 创建无向图 <class 'networkx.classes.graph.Graph'>
     knn_G=nx.Graph()
     # 添加节点（个数为数据集样本数）
     for i in range(len(data)):
         knn_G.add_node(i)
-    # 搜索各节点的KNN近邻，仅添加双向边
+    # # 搜索各节点的KNN近邻，仅添加双向边
+    # for i in range(len(data)):
+    #     # 遍历i的所有近邻j
+    #     for j in knn_neighbors[i]:
+    #         # 检查i是否在j的近邻中
+    #         if i in knn_neighbors[j]:
+    #             knn_G.add_edge(i,j,weight=data_matrix[i][j])
+    # 搜索各节点的KNN近邻，添加所有边（不检查双向关系）
     for i in range(len(data)):
         # 遍历i的所有近邻j
         for j in knn_neighbors[i]:
-            # 检查i是否在j的近邻中
-            if i in knn_neighbors[j]:
-                knn_G.add_edge(i, j,weight=data_matrix[i][j])
-
-    print(f"图创建完成: {len(knn_G.nodes())} 个节点, {len(knn_G.edges())} 条边")
+            # 直接添加边，不检查双向关系
+            knn_G.add_edge(i,j,weight=data_matrix[i][j])
+    print(f'使用K值：{k}')
+    print(f"图创建完成：{len(knn_G.nodes())} 个节点，{len(knn_G.edges())} 条边")
     # # 获取所有边
     # edges=knn_G.edges.data()
     # print("所有边：")
