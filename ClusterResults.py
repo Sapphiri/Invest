@@ -1,40 +1,37 @@
 import os
-os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"]="1"
 import numpy as np
 from sklearn.cluster import KMeans, AgglomerativeClustering, SpectralClustering
 from DataNormalization import load_normalized_data,get_dataset_classes
 
 # 对所有数据集进行Kmeans聚类，返回聚类结果(dict)
 def perform_kmeans(datasets,k_values):
-    cluster_results = {}
-
+    cluster_results={}
     for dataset_name in datasets:
-        print(f"\n{'=' * 50}")
-        print(f"正在处理数据集(Kmeans): {dataset_name}")
-
+        print(f"\n{'='*50}")
+        print(f"正在处理数据集(Kmeans)：{dataset_name}")
         # 获取归一化后的数据
-        data = load_normalized_data(dataset_name, method_name="minmax")
+        data = load_normalized_data(dataset_name,method_name="minmax")
         # 获取用户指定的K值，如果没有指定则使用默认值
-        k = k_values.get(dataset_name, 3)
-        print(f"使用K值: {k}")
+        k = k_values.get(dataset_name,3)
+        print(f"使用K值：{k}")
         # 执行K-means聚类
-        kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+        kmeans = KMeans(n_clusters=k,random_state=42,n_init=10)
         y_pred = kmeans.fit_predict(data)
         # print(type(y_pred),y_pred)
 
         # 将标签数组转换为聚类字典格式
-        cluster_dict = {}
+        cluster_dict={}
         for cluster_id in range(k):
-            node_idx = np.where(y_pred==cluster_id)[0].tolist()
-            cluster_dict[cluster_id] = node_idx
-
+            node_idx=np.where(y_pred==cluster_id)[0].tolist()
+            cluster_dict[cluster_id]=node_idx
         # 存储结果
         cluster_results[dataset_name] ={
-            'k': k,
-            'labels': y_pred,  # 保持原始标签数组
-            'clustering_dict': cluster_dict,  # 新增：聚类字典格式
-            'cluster_sizes': [len(idx) for idx in cluster_dict.values()],  # 各聚类大小
-            'kmeans_model': kmeans
+            'k':k,
+            'labels':y_pred,  # 保持原始标签数组
+            'clustering_dict':cluster_dict,  # 新增：聚类字典格式
+            'cluster_sizes':[len(idx) for idx in cluster_dict.values()],  # 各聚类大小
+            'kmeans_model':kmeans
         }
         print(f'{dataset_name}数据集Kmeans聚类已完成')
     return cluster_results
@@ -53,6 +50,7 @@ def perform_hierarchical(datasets,k_values):
         # 执行层次聚类
         hierarchical=AgglomerativeClustering(n_clusters=k)
         y_pred=hierarchical.fit_predict(data)
+
         # 将标签数组转换为聚类字典格式
         cluster_dict={}
         for cluster_id in range(k):
@@ -83,12 +81,12 @@ def perform_spectral(datasets, k_values):
         # 执行谱聚类
         spectral=SpectralClustering(n_clusters=k, random_state=42, affinity='rbf')
         y_pred=spectral.fit_predict(data)
+
         # 将标签数组转换为聚类字典格式
         cluster_dict={}
         for cluster_id in range(k):
             node_idx=np.where(y_pred==cluster_id)[0].tolist()
             cluster_dict[cluster_id]=node_idx
-
         # 存储结果
         cluster_results[dataset_name]={
             'k':k,

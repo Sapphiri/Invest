@@ -1,5 +1,5 @@
 import os
-os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"]="1"
 from DataNormalization import get_dataset_numbers
 import numpy as np
 from scipy.stats import hypergeom, alpha
@@ -139,7 +139,7 @@ def calculate_p_value_for_node_in_cluster(graph,cluster,node):
 输入：graph:图对象    cluster：一个聚类的节点列表   node：节点ID
 输出：p_value
 """
-def calculate_p_value_for_node_outside_cluster(graph, cluster, node):
+def calculate_p_value_for_node_outside_cluster(graph,cluster,node):
     # 获取节点与聚类内部的连p接数
     k_in=sum(1 for neighbor in graph.neighbors(node) if neighbor in cluster)
     # 获取节点与聚类外部的连接数
@@ -215,14 +215,14 @@ def main():
         'Wine': 3,
         'Breast Cancer': 2
     }
-    knn_graphs = CreatGraph.create_knn_graphs(datasets, knn_vals)
-    # cluster_results = ClusterResults.perform_kmeans(datasets, k_vals) # k-means聚类结果
-    # cluster_results = ClusterResults.perform_hierarchical(datasets, k_vals) # 层次聚类结果
-    cluster_results = ClusterResults.perform_spectral(datasets, k_vals) # 谱聚类结果
+    knn_graphs=CreatGraph.create_knn_graphs(datasets,knn_vals)
+    # cluster_results=ClusterResults.perform_kmeans(datasets,k_vals) # k-means聚类结果
+    # cluster_results=ClusterResults.perform_hierarchical(datasets,k_vals) # 层次聚类结果
+    cluster_results=ClusterResults.perform_spectral(datasets,k_vals) # 谱聚类结果
     alpha_val=0.05
     for dataset_name in datasets:
         # print(calculate_p_value_for_node(knn_graphs[dataset_name],cluster_results[dataset_name],0,0))
         overall_stats=overall_clustering_significance(dataset_name,knn_graphs,cluster_results,alpha_val)
         print_overall_clustering_significance(overall_stats,dataset_name)
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

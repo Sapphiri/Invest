@@ -5,9 +5,9 @@ from DataNormalization import load_normalized_data
 
 # 返回一个数据集最近k个节点的索引矩阵（n维数组）
 def get_knn_neighbors(data,k):
-    n = len(data)
+    n=len(data)
     # 初始化n×k的数组存储近邻索引
-    knn_neighbors = np.zeros((n,k),dtype=int)
+    knn_neighbors=np.zeros((n,k),dtype=int)
     data_matrix=distance_matrix(data,data)
     for i in range(n):
         # 获取i到所有节点的距离（含自身）
@@ -59,12 +59,12 @@ def create_knn_graph(data,k):
 def create_knn_graphs(datasets,k_vals):
     knn_graphs={}  # 用于存储所有图的字典
     for dataset_name in datasets:
-        print(f"\n{'=' * 50}")
-        print(f"正在处理数据集(KNN_Graph): {dataset_name}")
-        data=load_normalized_data(dataset_name, method_name="minmax")
+        print(f"\n{'='*50}")
+        print(f"正在处理数据集(KNN_Graph)：{dataset_name}")
+        data=load_normalized_data(dataset_name,method_name="minmax")
         print(f"数据形状: {data.shape}",type(data))
         # print(data,"\n")
-        k = k_vals.get(dataset_name, 3)
+        k = k_vals.get(dataset_name,3)
         knn_G=create_knn_graph(data,k)
         # 将图存储到字典中，以数据集名为键
         knn_graphs[dataset_name]=knn_G
@@ -80,12 +80,12 @@ def main():
     }
     knn_graphs=create_knn_graphs(datasets,k_vals)
     for dataset_name in datasets:
-        print(f"图创建完成: {len(knn_graphs[dataset_name].nodes())} 个节点, {len(knn_graphs[dataset_name].edges())} 条边")
+        print(f"图创建完成: {len(knn_graphs[dataset_name].nodes())} 个节点,{len(knn_graphs[dataset_name].edges())} 条边")
         #print('临接节点：', list(knn_graphs[dataset_name].neighbors(149)))
         # D = sum(dict(knn_graphs[dataset_name].degree()).values())
         # print(knn_graphs[dataset_name].degree())
         # print(D)
         # DS=2 * knn_graphs[dataset_name].number_of_edges()
         # print(DS)
-if __name__ == "__main__":
+if __name__=="__main__":
     main()
