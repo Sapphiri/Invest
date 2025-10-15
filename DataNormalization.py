@@ -92,6 +92,23 @@ def load_normalized_data(dataset_name, method_name="minmax"):
         print("请先运行生成归一化数据")
         return None
 
+
+"""
+根据数据集名称返回数据集的真实类别数
+参数：dataset_name：数据集名称
+返回：数据集的真实类别数，如果数据集不存在则返回 -1
+"""
+def get_dataset_classes(dataset_name):
+    if dataset_name in datasets:
+        # 加载数据集
+        dataset=datasets[dataset_name]()
+        # 返回类别数
+        return len(dataset.target_names)
+    else:
+        print(f"错误: 数据集 '{dataset_name}' 不存在")
+        print(f"可用的数据集：{list(datasets.keys())}")
+        return -1
+
 def main():
     #对数据进行归一化处理
     normalization_process(datasets)
@@ -103,6 +120,8 @@ def main():
     #保存所有数据集的归一化结果
     save_data_minmax(minmax_results, "minmax")
     #save_data_standard(standardized_results, "standard")
+    print('Iris数据集的类别数为：',get_dataset_classes('Iris'))
+
 
 if __name__ == "__main__":
     main()

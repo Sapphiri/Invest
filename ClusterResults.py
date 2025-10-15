@@ -2,7 +2,7 @@ import os
 os.environ["OMP_NUM_THREADS"] = "1"
 import numpy as np
 from sklearn.cluster import KMeans
-from DataNormalization import load_normalized_data
+from DataNormalization import load_normalized_data,get_dataset_classes
 
 # 对所有数据集进行Kmeans聚类，返回聚类结果(dict)
 def perform_kmeans(datasets,k_values):
@@ -51,7 +51,7 @@ def main():
     datasets=['Iris','Wine','Breast Cancer']
     # 自定义K值
     k_values={
-        'Iris': 3,
+        'Iris': get_dataset_classes('Iris'),
         'Wine': 3,
         'Breast Cancer': 2
     }
