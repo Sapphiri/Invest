@@ -4,49 +4,49 @@ from sklearn.datasets import load_wine,load_iris,load_breast_cancer
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 # 定义要处理的数据集
-datasets = {
-    'Iris': load_iris,
-    'Wine': load_wine,
-    'Breast Cancer': load_breast_cancer
+datasets={
+    'Iris':load_iris,
+    'Wine':load_wine,
+    'Breast Cancer':load_breast_cancer
 }
 # 存储归一化结果
-minmax_results = {}
-standardized_results = {}
+minmax_results={}
+standardized_results={}
 # 创建输出目录（如果不存在）
-filepath = "DataResults"
-os.makedirs(filepath, exist_ok=True)
+filepath="DataResults"
+os.makedirs(filepath,exist_ok=True)
 
 def normalization_process(dataset):
     # 对数据进行归一化处理
     for name, loader in dataset.items():
         # 加载数据(特征数据矩阵，特征名称列表，目标标签向量，目标标签列表)
-        datasets_data = loader()
-        data = datasets_data.data
-        x = datasets_data.feature_names
-        y = datasets_data.target
-        z = datasets_data.target_names
+        datasets_data=loader()
+        data=datasets_data.data
+        x=datasets_data.feature_names
+        y=datasets_data.target
+        z=datasets_data.target_names
 
         # 创建归一化器实例
-        minmax_scaler = MinMaxScaler()
-        standard_scaler = StandardScaler()
+        minmax_scaler=MinMaxScaler()
+        standard_scaler=StandardScaler()
 
         # 最小-最大归一化
-        data_minmax = minmax_scaler.fit_transform(data)
+        data_minmax=minmax_scaler.fit_transform(data)
         # 标准化
-        data_standard = standard_scaler.fit_transform(data)
+        data_standard=standard_scaler.fit_transform(data)
 
         # 存储结果
-        minmax_results[name] = {
-            'data': data_minmax,
-            'feature_names': x,
-            'target': y,
-            'target_names': z
+        minmax_results[name]={
+            'data':data_minmax,
+            'feature_names':x,
+            'target':y,
+            'target_names':z
         }
-        standardized_results[name] = {
-            'data': data_standard,
-            'feature_names': x,
-            'target': y,
-            'target_names': z
+        standardized_results[name]={
+            'data':data_standard,
+            'feature_names':x,
+            'target':y,
+            'target_names':z
         }
 
     print("\n所有归一化处理完成！")
@@ -59,7 +59,7 @@ def normalization_process(dataset):
 #用于输出所有数据集的最大-最小归一化结果
 def print_minmax_results():
     for dataset_name, data_results in minmax_results.items():
-        data = data_results['data']
+        data=data_results['data']
         print(f"\n{dataset_name} 数据集:")
         print(f"数据形状: {data.shape}")
         print(data,"\n")
@@ -67,21 +67,21 @@ def print_minmax_results():
 #用于输出所有数据集的标准化结果
 def print_standardized_results():
     for dataset_name, data_results in standardized_results.items():
-        data = data_results['data']
+        data=data_results['data']
         print(f"\n{dataset_name} 数据集:")
         print(f"数据形状: {data.shape}")
         print(data,"\n")
 
 #用于保存所有数据集的归一化结果
-def save_data_minmax(results, method_name):
+def save_data_minmax(results,method_name):
     for dataset_name, data_results in results.items():
-        filename = f"{dataset_name}_{method_name}_data.txt"
+        filename=f"{dataset_name}_{method_name}_data.txt"
         np.savetxt(f"{filepath}/{filename}", data_results['data'])
-        print(f"已保存{dataset_name}的{method_name}归一化数据: {filename}")
+        print(f"已保存{dataset_name}的{method_name}归一化数据：{filename}")
     print(f"\n所有{method_name}归一化数据已保存完毕！")
 
 # 加载储存的归一化数据
-def load_normalized_data(dataset_name, method_name="minmax"):
+def load_normalized_data(dataset_name,method_name="minmax"):
     filename=f"{dataset_name}_{method_name}_data.txt"
     try:
         data=np.loadtxt(f"{filepath}/{filename}")
