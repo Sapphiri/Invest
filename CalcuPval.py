@@ -216,7 +216,9 @@ def main():
         'Breast Cancer': 2
     }
     knn_graphs = CreatGraph.create_knn_graphs(datasets, knn_vals)
-    cluster_results = ClusterResults.perform_kmeans(datasets, k_vals)
+    # cluster_results = ClusterResults.perform_kmeans(datasets, k_vals) # k-means聚类结果
+    # cluster_results = ClusterResults.perform_hierarchical(datasets, k_vals) # 层次聚类结果
+    cluster_results = ClusterResults.perform_spectral(datasets, k_vals) # 谱聚类结果
     alpha_val=0.05
     for dataset_name in datasets:
         # print(calculate_p_value_for_node(knn_graphs[dataset_name],cluster_results[dataset_name],0,0))
