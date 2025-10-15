@@ -200,14 +200,18 @@ def print_cluster_significance(cluster_significances):
 
 def main():
     # 数据集
-    datasets=['Iris']
+    datasets=['Iris','Wine','Breast Cancer']
     # 自定义KNN图K值
     knn_vals={
-        'Iris':10
+        'Iris':10,
+        'Wine': 18,
+        'Breast Cancer': 30
     }
     # 自定义聚类K值
     k_vals={
-        'Iris': 3
+        'Iris': 3,
+        'Wine': 3,
+        'Breast Cancer': 2
     }
     knn_graphs = CreatGraph.create_knn_graphs(datasets, knn_vals)
     cluster_results = ClusterResults.perform_kmeans(datasets, k_vals)
