@@ -11,6 +11,8 @@ import ClusterResults
 返回：overall_clu_significance：字典：包含数据集整体聚类结果的统计显著性
 """
 def overall_clustering_significance(dataset_name,knn_graphs,cluster_results,alpha=0.01):
+    print('\n'+'*'*80)
+    print(f'正在对 {dataset_name} 数据集聚类结果显著性进行分析：')
     cluster_significances=calculate_cluster_significance(knn_graphs[dataset_name],cluster_results[dataset_name],alpha)
     if not cluster_significances:
         return{
@@ -184,7 +186,7 @@ def print_overall_clustering_significance(overall_stats,dataset_name=""):
 """
 def print_cluster_significance(cluster_significances):
     # 打印每个聚类的详细信息
-    print("各聚类详细信息:")
+    print("各聚类显著性详细信息:")
     for cluster_id, cs in cluster_significances.items():
         print("-"*80)
         print(f"聚类 {cluster_id}:")
@@ -197,7 +199,6 @@ def print_cluster_significance(cluster_significances):
         # 显示p值分布
         p_values=[p_val for _,p_val in cs['node_p_values']]
         print(f"p值范围: [{min(p_values)} : {max(p_values)}]")
-        print()
 
 def main():
     # 数据集
