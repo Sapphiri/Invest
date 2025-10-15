@@ -207,18 +207,18 @@ def main():
     knn_vals={
         'Iris':int(np.sqrt(get_dataset_numbers('Iris'))),
         'Wine': int(np.sqrt(get_dataset_numbers('Wine'))),
-        'Breast Cancer': int(np.sqrt(get_dataset_numbers('Breast Cancer')))
+        'Breast Cancer':int(np.sqrt(get_dataset_numbers('Breast Cancer')))
     }
     # 自定义聚类K值
     k_vals={
-        'Iris': 3,
-        'Wine': 3,
-        'Breast Cancer': 2
+        'Iris':3,
+        'Wine':3,
+        'Breast Cancer':2
     }
     knn_graphs=CreatGraph.create_knn_graphs(datasets,knn_vals)
-    # cluster_results=ClusterResults.perform_kmeans(datasets,k_vals) # k-means聚类结果
+    cluster_results=ClusterResults.perform_kmeans(datasets,k_vals) # k-means聚类结果
     # cluster_results=ClusterResults.perform_hierarchical(datasets,k_vals) # 层次聚类结果
-    cluster_results=ClusterResults.perform_spectral(datasets,k_vals) # 谱聚类结果
+    # cluster_results=ClusterResults.perform_spectral(datasets,k_vals) # 谱聚类结果
     alpha_val=0.05
     for dataset_name in datasets:
         # print(calculate_p_value_for_node(knn_graphs[dataset_name],cluster_results[dataset_name],0,0))
